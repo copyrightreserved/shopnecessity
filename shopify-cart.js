@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const BUY_BUTTON_SELECTOR = "#shopify-buy-button"; // Your Buy Button element ID
-  const VARIANT_ID = "51365214552353"; // Actual variant ID
+  const VARIANT_ID = "51365214552353"; // Your real variant ID
 
   const button = document.querySelector(BUY_BUTTON_SELECTOR);
 
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // --- Style the Button ---
+  // Style the button
   button.style.width = "497px";
   button.style.backgroundColor = "black";
   button.style.color = "white";
@@ -20,14 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
   button.style.transition = "background-color 0.3s ease";
 
   button.addEventListener("mouseenter", () => {
-    button.style.backgroundColor = "#8e8e8e"; // Hover color
+    button.style.backgroundColor = "#8e8e8e";
   });
 
   button.addEventListener("mouseleave", () => {
     button.style.backgroundColor = "black";
   });
 
-  // --- Handle Click / Add to Cart ---
   button.addEventListener("click", function (e) {
     e.preventDefault();
 
@@ -44,11 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((res) => res.json())
       .then((data) => {
-        // Change button style to "Added"
         button.textContent = "Added";
         button.style.backgroundColor = "#8e8e8e";
 
-        // Open Shopify Cart Drawer (if available)
+        // Trigger Shopify cart drawer (if available)
         if (window.Shopify?.cart?.open) {
           window.Shopify.cart.open();
         }
