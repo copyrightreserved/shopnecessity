@@ -1,58 +1,38 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const BUY_BUTTON_SELECTOR = "#shopify-buy-button"; // Your Buy Button element ID
-  const VARIANT_ID = "51365214552353"; // Your real variant ID
+  const button = document.querySelector("#shopify-buy-button");
+  const variantId = "51365214552353";
 
-  const button = document.querySelector(BUY_BUTTON_SELECTOR);
+  if (!button) return console.error("Add‑to‑cart button not found.");
 
-  if (!button) {
-    console.error("Buy Button not found.");
-    return;
-  }
-
-  // Style the button
+  // Style & hover states
   button.style.width = "497px";
-  button.style.backgroundColor = "black";
+  button.style.background = "black";
   button.style.color = "white";
-  button.style.padding = "12px 24px";
-  button.style.border = "none";
-  button.style.fontSize = "16px";
-  button.style.cursor = "pointer";
-  button.style.transition = "background-color 0.3s ease";
+  button.style.transition = "background 0.3s";
+  button.onmouseenter = () => button.style.background = "#8e8e8e";
+  button.onmouseleave = () => button.style.background = button.classList.contains('added') ? '#8e8e8e' : 'black';
 
-  button.addEventListener("mouseenter", () => {
-    button.style.backgroundColor = "#8e8e8e";
-  });
-
-  button.addEventListener("mouseleave", () => {
-    button.style.backgroundColor = "black";
-  });
-
+  // Click handler
   button.addEventListener("click", function (e) {
     e.preventDefault();
 
     fetch("/cart/add.js", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        id: VARIANT_ID,
-        quantity: 1,
-      }),
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ id: variantId, quantity: 1 })
     })
-      .then((res) => res.json())
-      .then((data) => {
-        button.textContent = "Added";
-        button.style.backgroundColor = "#8e8e8e";
+    .then(res => res.json())
+    .then(data => {
+      button.innerText = "Added";
+      button.classList.add("added");
+      button.style.background = "#8e8e8e";
 
-        // Trigger Shopify cart drawer (if available)
-        if (window.Shopify?.cart?.open) {
-          window.Shopify.cart.open();
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to add to cart", err);
-      });
+      if (window.Shopify?.cart?.open) {
+        window.Shopify.cart.open();
+      } else {
+        console.warn("Cart drawer not detected.");
+      }
+    })
+    .catch(err => console.error("Add to cart failed", err));
   });
 });
