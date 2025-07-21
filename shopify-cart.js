@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const BUY_BUTTON_SELECTOR = "#shopify-buy-button"; // Your Buy Button element ID
-  const VARIANT_ID = "your-variant-id-here"; // Replace this with your actual variant ID
+  const VARIANT_ID = "51365214552353"; // Actual variant ID
 
   const button = document.querySelector(BUY_BUTTON_SELECTOR);
 
